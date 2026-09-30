@@ -1,4 +1,5 @@
 import { Bicycle } from "./bicycle.model";
+import {Brand} from "../brands/brand.model";
 
 export class BicycleService {
 
@@ -15,7 +16,7 @@ export class BicycleService {
 
 
   static async create(data: {
-    brand: string;
+    brandId: number;
     model: string;
     description?: string | null;
     price: number;
@@ -28,8 +29,8 @@ export class BicycleService {
   static async update(
     bicycle: Bicycle,
     data: {
-      brand?: string;
-      model?: string;
+      brandId: number;
+      model: string;
       description?: string | null;
       price?: number;
       stock?: number;
@@ -41,5 +42,16 @@ export class BicycleService {
 
   static async delete(bicycle: Bicycle) {
     await bicycle.destroy();
+  }
+
+  static async findEagerById (id: number){
+    return Bicycle.findByPk(id, {
+      include:[
+        {
+          model: Brand,
+          as: "brand"
+        }
+      ]
+    });
   }
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Bicycle, BicyclePayload } from '../types/bicycle'
-import { bicycleService } from '../services/bicycleService'
+import { bicycleService } from '../services/bicyclesService'
 
 export function useBicycles() {
     const [bicycles, setBicycles] = useState<Bicycle[]>([])

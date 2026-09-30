@@ -1,9 +1,14 @@
-import { app } from "./app";
+import express from 'express';
 import { sequelize } from "./config/database";
 import { env } from "./config/env";
+import { app } from "./app";
 
 // Importamos los modelos para que Sequelize los registre.
 import "./modules/bicycles/bicycle.model";
+import "./modules/brands/brand.model";
+import { defineAssociations } from "./models/associations";
+
+defineAssociations();
 
 async function startServer() {
   try {

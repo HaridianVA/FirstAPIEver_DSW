@@ -13,4 +13,5 @@ router.put("/:id", BicycleController.update);
 
 router.delete("/:id", BicycleController.delete);
 
+router.get("/eagerly/:id", BicycleController.getEagerlyById);
 export default router;
