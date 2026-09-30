@@ -1,115 +1,185 @@
-# Bicycle Shop
+## Bicycles API
 
-## Introduction
+A REST API developed as part of a vocational training project. The project is designed to manage bicycle information through a TypeScript, Node.js, Express, and Sequelize backend connected to a SQL database.
 
-This is a learning project for building a backend API and connecting a frontend to it. Using a bicycle shop as an example, you will learn how to create API endpoints, store data in MySQL, and make HTTP requests from a React interface to create, read, update, and delete bicycles.
+The API provides CRUD operations for bicycles and uses a relational database with separate brands and bicycles tables.
 
-The backend uses TypeScript, Express, and Sequelize. The frontend uses TypeScript, React, and Vite.
+## Getting Started
 
-To work through the project as a learning exercise, use the [learning branch](https://github.com/tcrurav/TypeScript-React-Express-Sequelize-Example/tree/learning).
+These instructions will help you get a copy of the project running on your local machine for development and testing purposes.
 
-**The `learning` branch is not available yet.** The link and cloning instructions below are prepared for when it is published; they will only work once that branch exists.
+## Prerequisites
 
-## Setup and development
+Before starting, make sure you have the following software installed:
 
-### 1. Prerequisites
+Node.js
 
-Install Git, Node.js with npm (a version compatible with Vite, such as Node.js 22.12+), and MySQL. Make sure the MySQL server is running before starting the backend.
+npm
 
-### 2. Clone the learning branch
+MySQL or another compatible MySQL database environment
 
-```bash
-git clone --branch learning --single-branch https://github.com/tcrurav/TypeScript-React-Express-Sequelize-Example.git
-cd TypeScript-React-Express-Sequelize-Example
-```
+Git, if you want to clone the repository
 
-Run the following setup steps from this project directory unless otherwise specified.
+You can check whether Node.js and npm are installed with:
 
-### 3. Create the database
+node --version
+npm --version
 
-Before running either application, create the database and configure both environment files.
+You should also have access to a MySQL database in order to create the tables used by the API.
 
-Connect to MySQL using MySQL Workbench or the command-line client:
+## Installing
 
-```bash
-mysql -u root -p
-```
+Follow these steps to set up the project locally.
 
-Execute this SQL statement:
+Clone the repository:
 
-```sql
-CREATE DATABASE IF NOT EXISTS dsw_products CHARACTER SET utf8mb4;
-```
+git clone <repository-url>
 
-The backend's configured MySQL user must have permission to access this database and create its tables. In the completed implementation, Sequelize creates missing tables when the backend starts; the database itself must already exist.
+Move into the project directory:
 
-### 4. Configure the backend environment
+cd FirstAPIEver_DSW
 
-Create a file named `.env` inside `backend/`:
+Install the project dependencies:
 
-```dotenv
-PORT=3000
-DB_HOST=localhost
-DB_PORT=3306
-DB_NAME=db_bicycle_shop
-DB_USER=your-database-username
-DB_PASSWORD=your-database-password
-```
+npm install
 
-Replace `DB_USER` and `DB_PASSWORD` with your local MySQL credentials. Adjust the host, port, and database name if your setup differs.
+Create the database tables using the SQL script included in the project:
 
-### 5. Configure the frontend environment
+bd-bicycles-brands.sql
 
-Create a file named `.env` inside `frontend/`:
+The SQL script creates two tables:
 
-```dotenv
-VITE_API_URL=http://localhost:3000/api
-```
+brands: stores bicycle brand information.
 
-This is the backend's base URL. Do not add a trailing slash or `/bicycles`, because the frontend appends endpoint paths itself. If you change the backend port, update this URL as well. Restart the relevant development server after changing an environment file.
+bicycles: stores bicycle information and links each bicycle to a brand through brandId.
 
-### 6. Install dependencies
+The bicycles table includes the following main fields:
 
-Install dependencies for both applications using their existing lockfiles:
+id
+brandId
+model
+description
+price
+stock
+createdAt
+updatedAt
 
-```bash
-cd backend
-npm ci
-cd ../frontend
-npm ci
-cd ..
-```
+The relationship between the tables is protected by a foreign key. A bicycle must reference an existing brand, and deleting a brand that is still referenced by bicycles is restricted.
 
-### 7. Start both applications
+Configure the database connection according to the project's configuration.
 
-Open two terminals in the project root and keep both running.
+## Start the API:
 
-In the first terminal, start the backend:
+npm start
 
-```bash
-cd backend
-npm run dev
-```
+The API runs locally at:
 
-With the configuration above, the API runs at [http://localhost:3000/api](http://localhost:3000/api), and the bicycle endpoint is [http://localhost:3000/api/bicycles](http://localhost:3000/api/bicycles).
+http://localhost:3000
 
-In the second terminal, start the frontend:
+Once the server is running, the API can be used to perform CRUD operations on bicycle data.
 
-```bash
-cd frontend
-npm run dev
-```
+For example, a GET request can be used to retrieve bicycle information:
 
-Open the local URL printed by Vite, usually [http://localhost:5173](http://localhost:5173). The frontend sends API requests to the URL configured in `frontend/.env`.
+GET http://localhost:3000/bicycles
 
-## Recommended links
+The exact routes depend on the route configuration included in the application.
 
-- [Express documentation](https://expressjs.com/) — routing, middleware, and backend APIs.
-- [Sequelize v6 documentation](https://sequelize.org/docs/v6/) — models and database queries.
-- [MySQL: Creating and selecting a database](https://dev.mysql.com/doc/refman/8.4/en/creating-database.html) — database setup.
-- [React: Quick Start](https://react.dev/learn) — components, state, and events.
-- [Vite: Getting Started](https://vite.dev/guide/) — frontend development tooling and Node.js requirements.
-- [npm ci documentation](https://docs.npmjs.com/cli/v11/commands/npm-ci/) — installing dependencies from a lockfile.
+Running the tests
+
+No automated test suite or dedicated test configuration is included in the provided project archive.
+
+If tests are added later, they can be executed here using the test command configured in package.json.
+
+Break down into end to end tests
+
+End-to-end tests should verify the API as a complete system, including the HTTP routes, controllers, services, database operations, and responses.
+
+Examples of useful end-to-end tests include:
+
+GET    /bicycles       -> Retrieve bicycles
+POST   /bicycles       -> Create a bicycle
+PUT    /bicycles/:id   -> Update a bicycle
+DELETE /bicycles/:id   -> Delete a bicycle
+
+These tests help ensure that requests are correctly processed from the API endpoint through to the database.
+
+And coding style tests
+
+No dedicated coding-style or linting tests are included in the provided archive.
+
+A linter such as ESLint could be added in the future to check TypeScript code for formatting problems, common errors, and consistent coding practices.
+
+For example:
+
+npm run lint
+
+## Deployment
+
+For a production deployment, the application should be hosted on a server capable of running Node.js and connected to a production MySQL database.
+
+Before deployment:
+
+Install the production dependencies.
+
+Configure the production database connection.
+
+Make sure the database schema has been created using bd-bicycles-brands.sql.
+
+Configure the server port and other environment-specific settings.
+
+Start the Node.js application using the appropriate production command.
+
+The API should also be configured to use environment variables for sensitive database credentials instead of storing them directly in the source code.
+
+Built With
+
+TypeScript - Programming language used for the backend
+
+Node.js - JavaScript runtime environment
+
+Express - Web framework used to build the REST API
+
+Sequelize - ORM used for database interaction
+
+MySQL - Relational database system
+
+## Contributing
+
+This project was created as a vocational training project.
+
+If you want to contribute, create a new branch for your changes, keep the code consistent with the existing project structure, and test your changes before submitting them.
+
+Example:
+
+git checkout -b feature/new-feature
+
+Then commit your changes and open a pull request.
+
+Versioning
+
+This project does not currently include a documented versioning or release system.
+
+For future releases, Semantic Versioning can be used to keep track of changes and releases.
+
+## Authors
+Haridian Vergara Alonso
+
+## License
+
+No specific license file is included in the provided project archive.
+
+If this project is intended to be distributed publicly, a license such as the MIT License can be added in a LICENSE.md file.
+
+## Acknowledgments
+
+Created as part of a vocational training project.
+
+Thanks to Tiburcio and learning resources used during the development of the project.
+
+Thanks to the open-source technologies used to build the API, including TypeScript, Node.js, Express, Sequelize, and MySQL.
+
+The included SQL script provides the database structure required for the bicycle and brand data.
+
 
 - ## Postman Link
 - https://documenter.getpostman.com/view/58320202/2sBYB4MnRa
