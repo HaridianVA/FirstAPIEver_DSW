@@ -33,6 +33,21 @@ export class BicycleDetailsService {
         return BicycleDetails.create(data);
     }
 
+    static async findAllEagerlyByFrameMaterial(frameMaterial: string) {
+  return BicycleDetails.findAll({
+    include: [
+      {
+        model: BicycleDetails,
+        as: 'detail',
+        where: {
+          frameMaterial
+        }
+      }
+    ],
+    order: [["id", "ASC"]]
+  });
+}
+
 
     static async update(
         BicycleDetails: BicycleDetails,

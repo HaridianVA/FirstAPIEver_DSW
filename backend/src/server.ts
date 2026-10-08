@@ -6,6 +6,7 @@ import { app } from "./app";
 // Importamos los modelos para que Sequelize los registre.
 import "./modules/bicycles/bicycle.model";
 import "./modules/brands/brand.model";
+import "./modules/bicycleDetails/bicycleDetails.model";
 import { defineAssociations } from "./models/associations";
 
 defineAssociations();

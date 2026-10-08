@@ -15,3 +15,4 @@ router.delete("/:id", bicycleDetailsController.delete);
 
 router.get("/eagerly/:id", bicycleDetailsController.getEagerlyById);
 export default router;
+
