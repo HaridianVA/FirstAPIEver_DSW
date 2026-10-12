@@ -3,6 +3,7 @@ import bicycleRoutes from "../modules/bicycles/bicycle.routes";
 import brandRoutes from "../modules/brands/brand.routes";
 import bicycleDetailsRoutes from "../modules/bicycleDetails/bicycleDetails.routes";
 import customerRoutes from "../modules/customers/customer.routes";
+import orderRoutes from "../modules/orders/order.routes";
 
 
 const router = Router();
@@ -14,5 +15,7 @@ router.use("/brands", brandRoutes);
 router.use("/bicycleDetails", bicycleDetailsRoutes);
 
 router.use("/customers", customerRoutes);
+
+router.use("/orders", orderRoutes);
 
 export default router;
