@@ -9,6 +9,7 @@ import "./modules/brands/brand.model";
 import "./modules/bicycleDetails/bicycleDetails.model";
 import "./modules/customers/customer.model";
 import "./modules/orders/order.model";
+import "./modules/order-items/order-item.model";
 import { defineAssociations } from "./models/associations";
 
 defineAssociations();
