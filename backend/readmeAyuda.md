@@ -602,3 +602,53 @@ El código exacto de los modelos (las columnas, tipos DECIMAL...). Basta con ent
 Los JSON concretos de Postman. Entiende la estructura, no los valores.
 Los diagramas mermaid (solo es notación para dibujar el diagrama ER).
 El detalle de cada archivo de importaciones.
+
+===================================================
+Sí, te explico: son las restricciones que el diagrama dibuja con las patitas de gallo. Cada una se traduce a algo concreto en el código.
+
+Qué significa cada símbolo
+
+El símbolo pegado a una entidad dice cuántas de esas entidades puede haber en ese extremo de la relación:
+
+Dibujo	Significa	En Sequelize
+||	Exactamente uno (obligatorio)	La clave foránea lleva allowNull: false.
+|o	Cero o uno (opcional)	La clave foránea lleva allowNull: true, y en TypeScript es number | null.
+o{	Cero o muchos	hasMany, sin más.
+|{	Uno o más (al menos uno)	La base de datos no puede obligar a esto, se valida en el código.
+
+Ejemplo: Model |o--o{ Bicycle quiere decir que una bici puede no tener modelo. Entonces modelId pasa a allowNull: true.
+
+Los casos que te pueden pedir
+
+1. "Permite nulos" o campo opcional
+
+En el modelo: allowNull: true. Si es obligatorio: allowNull: false.
+En el declare de TypeScript: string | null. Si TypeScript se queja al crear, usa CreationOptional<...>.
+En el controller, no marques ese campo como obligatorio en la validación.
+Se prueba en Bruno con un POST sin ese campo: si es opcional, debe dar 201; si no, 400 o 500.
+
+2. Relación opcional (la clave foránea puede ser nula)
+
+allowNull: true en la FK. Con eso, onDelete: "SET NULL" pasa a tener sentido (si borras el modelo, la bici se queda sin modelo, no se borra).
+En las consultas, un include normal es un LEFT JOIN, así que las bicis sin modelo salen con model: null.
+Si el include lleva where o required: true, se convierte en INNER JOIN y esas bicis desaparecen. Si quieres conservarlas, pon required: false.
+
+3. "Tiene que tener uno o más de algo" (por ejemplo, un pedido con al menos una línea)
+
+Esto no se puede forzar con una clave foránea. Se valida en el controller: en el POST exige que venga al menos un elemento y, si no, devuelve un 400.
+Si además te piden que no se pueda borrar la última línea de un pedido, la comprobación va en el DELETE.
+
+4. "Solo uno" (1:1)
+
+unique: true en la clave foránea, como hicimos en bicycleDetails. Sin eso se pueden crear dos.
+
+5. Otras restricciones sueltas
+
+unique: true (valores repetidos no).
+defaultValue (valor por defecto).
+validate: { min: 1 } (cantidad mínima).
+DataTypes.ENUM(...) (solo ciertos valores).
+Para no fallar
+Lee el diagrama con calma, símbolo por símbolo, y apunta al lado de cada relación qué restricción lleva.
+Cambiar allowNull en una tabla que ya existe no se aplica: es la misma trampa de siempre, así que borra la base de datos y créala vacía si lo cambias.
+Después de cada restricción, pruébala en Bruno con el caso malo (por ejemplo, un POST sin el campo) y con el bueno.
