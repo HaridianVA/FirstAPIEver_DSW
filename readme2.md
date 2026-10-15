@@ -665,4 +665,63 @@ Op.like	contiene un texto, con %	LIKE
 
 Truco para acordarte: la g es greater (mayor) y la l es less (menor), y la e del final es equal (igual): gte es "mayor o igual".
 
+## Operadores disponibles
+
+| Operador | Significa | Ejemplo |
+|---|---|---|
+| `Op.gt` | mayor que `>` | `price: { [Op.gt]: 400 }` |
+| `Op.gte` | mayor o igual `>=` | `price: { [Op.gte]: 400 }` |
+| `Op.lt` | menor que `<` | `price: { [Op.lt]: 400 }` |
+| `Op.lte` | menor o igual `<=` | `price: { [Op.lte]: 400 }` |
+| `Op.ne` | distinto `!=` | `stock: { [Op.ne]: 0 }` |
+| `Op.between` | entre dos valores | `price: { [Op.between]: [400, 1000] }` |
+| `Op.like` | contiene texto | `model: { [Op.like]: "%Orca%" }` |
+| `Op.in` | uno de una lista | `brandId: { [Op.in]: [1, 2] }` |
+
+### Combinar condiciones
+
+Varias columnas en el mismo `where` se unen con **AND** automáticamente:
+
+```typescript
+where: {
+    price: { [Op.gt]: 400 },
+    stock: { [Op.gt]: 0 },
+}
+```
+
+Para **OR**, se usa `Op.or`:
+
+```typescript
+where: {
+    [Op.or]: [
+        { price: { [Op.gt]: 1500 } },
+        { stock: { [Op.lt]: 3 } },
+    ],
+}
+```
+
+Dos condiciones sobre **la misma columna** (un rango) se escriben dentro del mismo objeto:
+
+```typescript
+where: { price: { [Op.gt]: 400, [Op.lt]: 1000 } }
+```
+
+### Filtro sobre una tabla relacionada
+
+Va dentro del `include`, junto con `required: true`:
+
+```typescript
+Order.findAll({
+    include: [{
+        model: OrderItem,
+        as: "items",
+        where: { unitPrice: { [Op.gt]: 400 } },
+        required: true,
+    }],
+});
+```
+
+Devuelve solo los pedidos que tienen alguna línea con `unitPrice` mayor que 400.
+
+
 Con Op.gt y Op.lt, el valor justo en el límite no entra: si pones > 100, una bici de exactamente 100 no sale. Por eso en el pre-examen probé con una bici de 100 exacto.
