@@ -651,3 +651,18 @@ Para no fallar
 Lee el diagrama con calma, símbolo por símbolo, y apunta al lado de cada relación qué restricción lleva.
 Cambiar allowNull en una tabla que ya existe no se aplica: es la misma trampa de siempre, así que borra la base de datos y créala vacía si lo cambias.
 Después de cada restricción, pruébala en Bruno con el caso malo (por ejemplo, un POST sin el campo) y con el bueno.
+
+=========================================================
+Los operadores que más te pueden salir:
+
+Operador	Significa	SQL
+Op.gt	mayor que	>
+Op.gte	mayor o igual	>=
+Op.lt	menor que	<
+Op.lte	menor o igual	<=
+Op.ne	distinto de	<>
+Op.like	contiene un texto, con %	LIKE
+
+Truco para acordarte: la g es greater (mayor) y la l es less (menor), y la e del final es equal (igual): gte es "mayor o igual".
+
+Con Op.gt y Op.lt, el valor justo en el límite no entra: si pones > 100, una bici de exactamente 100 no sale. Por eso en el pre-examen probé con una bici de 100 exacto.
